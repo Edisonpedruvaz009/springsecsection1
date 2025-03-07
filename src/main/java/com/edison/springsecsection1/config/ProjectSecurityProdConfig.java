@@ -1,5 +1,7 @@
 package com.edison.springsecsection1.config;
 
+import com.edison.springsecsection1.exceptionhandling.CustomAccessDeniedHandler;
+import com.edison.springsecsection1.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -21,14 +23,16 @@ public class ProjectSecurityProdConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         //http.authorizeHttpRequests((requests) -> requests.anyRequest().denyAll());
         //http.authorizeHttpRequests((requests) -> requests.anyRequest().permitAll());
-        http.requiresChannel(rcc->rcc.anyRequest().requiresSecure())
+        http.sessionManagement(smc->smc.invalidSessionUrl("/invalidSession").maximumSessions(1).maxSessionsPreventsLogin(true))
+                .requiresChannel(rcc->rcc.anyRequest().requiresSecure())
                 .csrf(csrfConfig->csrfConfig.disable())
                 .authorizeHttpRequests((requests) -> requests.requestMatchers("/myAccount","/myBalance","/myLoans","/myCards").authenticated()
-                .requestMatchers("/myNotices","/contact","/error","/register").permitAll());
+                .requestMatchers("/myNotices","/contact","/error","/register","/invalidSession").permitAll());
         //http.formLogin(flc ->flc.disable());
         //http.httpBasic(hbc -> hbc.disable());
         http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+        http.httpBasic(hbc->hbc.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+        http.exceptionHandling(ehc->ehc.accessDeniedHandler(new CustomAccessDeniedHandler())); // it is a global config
         return http.build();
     }
 
