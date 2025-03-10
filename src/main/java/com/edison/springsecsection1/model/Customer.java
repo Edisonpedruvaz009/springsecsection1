@@ -19,6 +19,8 @@ public class Customer {
     @Column(name = "customer_id")
     private long id;
 
+    private String name;
+
     private String email;
 
     @Column(name = "mobile_number")

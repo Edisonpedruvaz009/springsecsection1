@@ -1,5 +1,6 @@
 package com.edison.springsecsection1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -31,9 +32,11 @@ public class Notice {
     @Column(name="notic_end_dt")
     private Date noticEndDt;
 
+    @JsonIgnore
     @Column(name="create_dt")
     private Date createDt;
 
+    @JsonIgnore
     @Column(name="update_dt")
     private Date updateDt;
 
