@@ -165,3 +165,9 @@ INSERT INTO `cards` (`card_number`, `customer_id`, `card_type`, `total_limit`, `
  INSERT INTO `notice_details` ( `notice_summary`, `notice_details`, `notic_beg_dt`, `notic_end_dt`, `create_dt`, `update_dt`)
  VALUES ('COVID-19 Insurance', 'EazyBank launched an insurance policy which will cover COVID-19 expenses. Please reach out to the branch for more details',
  CURDATE() - INTERVAL 30 DAY, CURDATE() + INTERVAL 30 DAY, CURDATE(), null);
+
+ INSERT INTO `authorities`(`customer_id`, `name`)
+ VALUES(1,'ROLE_USER');
+
+ INSERT INTO `authorities`(`customer_id`, `name`)
+ VALUES(1,'ROLE_ADMIN');
