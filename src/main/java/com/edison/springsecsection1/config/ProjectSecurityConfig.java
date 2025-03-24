@@ -2,7 +2,10 @@ package com.edison.springsecsection1.config;
 
 import com.edison.springsecsection1.exceptionhandling.CustomAccessDeniedHandler;
 import com.edison.springsecsection1.exceptionhandling.CustomBasicAuthenticationEntryPoint;
+import com.edison.springsecsection1.filter.AuthoritiesLoggingAfterFilter;
+import com.edison.springsecsection1.filter.AuthoritiesLoggingAtFilter;
 import com.edison.springsecsection1.filter.CsrfCookieFilter;
+import com.edison.springsecsection1.filter.RequestValidationBeforeFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +55,10 @@ public class ProjectSecurityConfig {
                      .ignoringRequestMatchers("/contact","/register")
                         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
+                .addFilterBefore(new RequestValidationBeforeFilter(), BasicAuthenticationFilter.class)
+                .addFilterAfter(new AuthoritiesLoggingAfterFilter(), BasicAuthenticationFilter.class)
+                .addFilterAt(new AuthoritiesLoggingAtFilter(), BasicAuthenticationFilter.class)
+
                // .sessionManagement(smc->smc.invalidSessionUrl("/invalidSession").maximumSessions(3).maxSessionsPreventsLogin(true))
                 .requiresChannel(rcc->rcc.anyRequest().requiresInsecure())
                 //.csrf(csrfConfig->csrfConfig.disable())
